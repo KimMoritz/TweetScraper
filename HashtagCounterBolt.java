@@ -32,7 +32,8 @@ public class HashtagCounterBolt implements IRichBolt {
         }
         collector.ack(tuple);
 
-        //TODO: Post to Camel/data service layer.
+        //TODO: Post to data service layer.
+
     }
 
     @Override

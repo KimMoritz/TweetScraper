@@ -29,8 +29,7 @@ public class TwitterHashtagStorm {
 
         LocalCluster cluster = new LocalCluster();
 
-        cluster.submitTopology("TwitterHashtagStorm", config,
-                builder.createTopology());
+        cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
         Thread.sleep(10000);
         cluster.shutdown();
     }
