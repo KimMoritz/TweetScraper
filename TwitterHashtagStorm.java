@@ -1,9 +1,14 @@
 package storm;
 
-import backtype.storm.Config;
-import backtype.storm.LocalCluster;
-import backtype.storm.topology.TopologyBuilder;
-import backtype.storm.tuple.Fields;
+import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
+import org.apache.storm.jms.JmsMessageProducer;
+import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.ITuple;
+import org.apache.storm.jms.JmsProvider;
+
+import javax.jms.*;
 
 public class TwitterHashtagStorm {
 
@@ -18,6 +23,29 @@ public class TwitterHashtagStorm {
         config.setDebug(true);
 
         TopologyBuilder builder = new TopologyBuilder();
+
+        JmsBolt jmsBolt = new JmsBolt();
+        JmsProvider jmsProvider = new JmsProvider() {
+            @Override
+            public ConnectionFactory connectionFactory() throws Exception {
+                return null;
+            }
+
+            @Override
+            public Destination destination() throws Exception {
+                return null;
+            }
+        };
+        jmsBolt.setJmsProvider(jmsProvider);
+        jmsBolt.setJmsMessageProducer(new JmsMessageProducer() {
+            @Override
+            public Message toMessage(Session session, ITuple input) throws JMSException {
+                String json = "{\"word\":\"" + input.getString(0) + "\", \"count\":" + String.valueOf(input.getInteger(1)) + "}";
+                return session.createTextMessage(json);
+            }
+        });
+
+
         builder.setSpout("twitter-spout", new TwitterSpout(consumerKey,
                 consumerSecret, accessToken, accessTokenSecret, keyWords));
 
@@ -26,6 +54,9 @@ public class TwitterHashtagStorm {
 
         builder.setBolt("twitter-hashtag-counter-bolt", new HashtagCounterBolt())
                 .fieldsGrouping("twitter-hashtag-reader-bolt", new Fields("hashtag"));
+
+        builder.setBolt("twitter-jms-counter-bolt", new JmsBolt())
+                .fieldsGrouping("twitter-hashtag-counter-bolt", new Fields("hashtag"));
 
         LocalCluster cluster = new LocalCluster();
 
