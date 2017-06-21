@@ -1,12 +1,13 @@
 package storm;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.jms.JmsMessageProducer;
+import org.apache.storm.jms.JmsProvider;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.ITuple;
-import org.apache.storm.jms.JmsProvider;
 
 import javax.jms.*;
 
@@ -28,19 +29,25 @@ public class TwitterHashtagStorm {
         JmsProvider jmsProvider = new JmsProvider() {
             @Override
             public ConnectionFactory connectionFactory() throws Exception {
-                return null;
+                ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
+                return connectionFactory;
             }
 
             @Override
             public Destination destination() throws Exception {
-                return null;
+                Destination destination = connectionFactory()
+                            .createConnection()
+                            .createSession(false, Session.AUTO_ACKNOWLEDGE)
+                            .createQueue("HashtagFromScraperQueue");
+
+                return destination;
             }
         };
         jmsBolt.setJmsProvider(jmsProvider);
         jmsBolt.setJmsMessageProducer(new JmsMessageProducer() {
             @Override
             public Message toMessage(Session session, ITuple input) throws JMSException {
-                String json = "{\"word\":\"" + input.getString(0) + "\", \"count\":" + String.valueOf(input.getInteger(1)) + "}";
+                String json = "{\"word\":\"" + input.getValue(0).toString() + "\", \"count\":" + String.valueOf(input.getValue(0)) + "}";
                 return session.createTextMessage(json);
             }
         });
@@ -55,7 +62,7 @@ public class TwitterHashtagStorm {
         builder.setBolt("twitter-hashtag-counter-bolt", new HashtagCounterBolt())
                 .fieldsGrouping("twitter-hashtag-reader-bolt", new Fields("hashtag"));
 
-        builder.setBolt("twitter-jms-counter-bolt", new JmsBolt())
+        builder.setBolt("twitter-jms-counter-bolt", jmsBolt)
                 .fieldsGrouping("twitter-hashtag-counter-bolt", new Fields("hashtag"));
 
         LocalCluster cluster = new LocalCluster();

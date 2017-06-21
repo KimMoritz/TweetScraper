@@ -6,7 +6,6 @@ import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
-import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Tuple;
 
 import javax.jms.*;
@@ -44,10 +43,17 @@ public class JmsBolt extends BaseRichBolt {
     public void prepare(Map stormConf, TopologyContext context,
                         OutputCollector collector) {
 
-        if(this.jmsProvider == null || this.producer == null){
+        if(this.jmsProvider == null){
             try {
-                throw new IllegalStateException("JMS Provider and MessageProducer not set.");
+                throw new IllegalStateException("JMS Provider not set.");
             } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+        }
+        if (this.producer == null){
+            try {
+                throw new IllegalAccessException("prouducer not set.");
+            }catch (IllegalAccessException e){
                 e.printStackTrace();
             }
         }
@@ -69,10 +75,8 @@ public class JmsBolt extends BaseRichBolt {
 
     @Override
     public void execute(Tuple input) {
-
-        // write the tuple to a JMS destination...
         try {
-            Message msg = this.producer.toMessage(this.session, (ITuple) input);
+            Message msg = this.producer.toMessage(this.session, input);
             if(msg != null){
                 if (msg.getJMSDestination() != null) {
                     this.messageProducer.send(msg.getJMSDestination(), msg);
@@ -84,7 +88,6 @@ public class JmsBolt extends BaseRichBolt {
                 this.collector.ack(input);
             }
         } catch (JMSException e) {
-            // failed to send the JMS message, fail the tuple fast
             this.collector.fail(input);
             e.printStackTrace();
         }
