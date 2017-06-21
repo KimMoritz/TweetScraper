@@ -15,12 +15,9 @@ import java.util.Map;
 public class JmsBolt extends BaseRichBolt {
 
     private boolean autoAck = true;
-
-    // javax.jms objects
     private Connection connection;
     private Session session;
     private MessageProducer messageProducer;
-    // JMS options
     private boolean jmsTransactional = false;
     private int jmsAcknowledgeMode = Session.AUTO_ACKNOWLEDGE;
     private JmsProvider jmsProvider;
@@ -57,7 +54,9 @@ public class JmsBolt extends BaseRichBolt {
                 e.printStackTrace();
             }
         }
+
         this.collector = collector;
+
         try {
             ConnectionFactory cf = this.jmsProvider.connectionFactory();
             Destination dest = this.jmsProvider.destination();
@@ -95,9 +94,7 @@ public class JmsBolt extends BaseRichBolt {
 
 
     @Override
-    public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-
-    }
+    public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {}
 
     @Override
     public void cleanup(){
@@ -108,4 +105,5 @@ public class JmsBolt extends BaseRichBolt {
             e.printStackTrace();
         }
     }
+
 }

@@ -1,15 +1,12 @@
 package storm;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.jms.JmsMessageProducer;
 import org.apache.storm.jms.JmsProvider;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
-import org.apache.storm.tuple.ITuple;
-
-import javax.jms.*;
+import storm.jms.BoltJmsProvider;
 
 public class TwitterHashtagStorm {
 
@@ -23,35 +20,17 @@ public class TwitterHashtagStorm {
         Config config = new Config();
         config.setDebug(true);
 
-        TopologyBuilder builder = new TopologyBuilder();
 
         JmsBolt jmsBolt = new JmsBolt();
-        JmsProvider jmsProvider = new JmsProvider() {
-            @Override
-            public ConnectionFactory connectionFactory() throws Exception {
-                ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
-                return connectionFactory;
-            }
-
-            @Override
-            public Destination destination() throws Exception {
-                Destination destination = connectionFactory()
-                            .createConnection()
-                            .createSession(false, Session.AUTO_ACKNOWLEDGE)
-                            .createQueue("HashtagFromScraperQueue");
-
-                return destination;
-            }
-        };
+        JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost", "HashtagFromScraperQueue");
         jmsBolt.setJmsProvider(jmsProvider);
-        jmsBolt.setJmsMessageProducer(new JmsMessageProducer() {
-            @Override
-            public Message toMessage(Session session, ITuple input) throws JMSException {
-                String json = "{\"word\":\"" + input.getValue(0).toString() + "\", \"count\":" + String.valueOf(input.getValue(0)) + "}";
-                return session.createTextMessage(json);
-            }
-        });
+        jmsBolt.setJmsMessageProducer((JmsMessageProducer) (session, input) -> {
+            String json = "{\"word\":\"" + input.getValue(0).toString() + "\", \"count\":"
+                    + String.valueOf(input.getValue(0)) + "}";
+            return session.createTextMessage(json);});
 
+        //Topology configuration
+        TopologyBuilder builder = new TopologyBuilder();
 
         builder.setSpout("twitter-spout", new TwitterSpout(consumerKey,
                 consumerSecret, accessToken, accessTokenSecret, keyWords));
