@@ -20,7 +20,6 @@ public class TwitterHashtagStorm {
         Config config = new Config();
         config.setDebug(true);
 
-
         JmsBolt jmsBolt = new JmsBolt();
         JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost", "HashtagFromScraperQueue");
         jmsBolt.setJmsProvider(jmsProvider);
