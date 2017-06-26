@@ -69,7 +69,6 @@ public class JmsBolt extends BaseRichBolt {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Override

@@ -38,8 +38,6 @@ public class HashtagReaderBolt implements IRichBolt {
     }
 
     @Override
-    public Map<String, Object> getComponentConfiguration() {
-        return null;
-    }
+    public Map<String, Object> getComponentConfiguration() {return null;}
 
 }
