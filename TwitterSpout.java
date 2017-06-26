@@ -16,9 +16,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 @SuppressWarnings("serial")
 public class TwitterSpout extends BaseRichSpout {
-    private SpoutOutputCollector _collector;
+    private SpoutOutputCollector collector;
     private LinkedBlockingQueue<Status> queue = null;
-    private TwitterStream _twitterStream;
+    private TwitterStream twitterStream;
     private String consumerKey;
     private String consumerSecret;
     private String accessToken;
@@ -37,12 +37,10 @@ public class TwitterSpout extends BaseRichSpout {
     @Override
     public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
         queue = new LinkedBlockingQueue<>(1000);
-        _collector = collector;
+        this.collector = collector;
         StatusListener statusListener = new StatusListener() {
             @Override
-            public void onStatus(Status status) {
-                queue.offer(status);
-            }
+            public void onStatus(Status status) {queue.offer(status);}
 
             @Override
             public void onDeletionNotice(StatusDeletionNotice sdn) {}
@@ -57,27 +55,25 @@ public class TwitterSpout extends BaseRichSpout {
             public void onException(Exception ex) {}
 
             @Override
-            public void onStallWarning(StallWarning arg0) {
-                System.out.println("StallWarning: " + arg0);
-            }
+            public void onStallWarning(StallWarning arg0) {System.out.println("StallWarning: " + arg0);}
         };
 
-        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+        ConfigurationBuilder twitterConfigurationBuilder = new ConfigurationBuilder();
 
-        configurationBuilder.setDebugEnabled(true)
+        twitterConfigurationBuilder.setDebugEnabled(true)
                 .setOAuthConsumerKey(consumerKey)
                 .setOAuthConsumerSecret(consumerSecret)
                 .setOAuthAccessToken(accessToken)
                 .setOAuthAccessTokenSecret(accessTokenSecret);
 
-        _twitterStream = new TwitterStreamFactory(configurationBuilder.build()).getInstance();
-        _twitterStream.addListener(statusListener);
+        twitterStream = new TwitterStreamFactory(twitterConfigurationBuilder.build()).getInstance();
+        twitterStream.addListener(statusListener);
 
         if (keyWords.length == 0) {
-            _twitterStream.sample();
+            twitterStream.sample();
         }else {
             FilterQuery query = new FilterQuery().track(keyWords);
-            _twitterStream.filter(query);
+            twitterStream.filter(query);
         }
     }
 
@@ -88,14 +84,12 @@ public class TwitterSpout extends BaseRichSpout {
         if (ret == null) {
             Utils.sleep(50);
         } else {
-            _collector.emit(new Values(ret));
+            collector.emit(new Values(ret));
         }
     }
 
     @Override
-    public void close() {
-        _twitterStream.shutdown();
-    }
+    public void close() {twitterStream.shutdown();}
 
     @Override
     public Map<String, Object> getComponentConfiguration() {
