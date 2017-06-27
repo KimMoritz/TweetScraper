@@ -80,6 +80,7 @@ public class JmsBolt extends BaseRichBolt {
                     this.messageProducer.send(msg.getJMSDestination(), msg);
                 } else {
                     this.messageProducer.send(msg);
+                    System.out.println(input);
                 }
             }
             if(this.autoAck){
@@ -90,7 +91,6 @@ public class JmsBolt extends BaseRichBolt {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {}

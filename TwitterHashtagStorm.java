@@ -21,7 +21,7 @@ public class TwitterHashtagStorm {
         config.setDebug(true);
 
         JmsBolt jmsBolt = new JmsBolt();
-        JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost", "HashtagFromScraperQueue");
+        JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost", "activemq:HashtagFromScraperQueue");
         jmsBolt.setJmsProvider(jmsProvider);
         jmsBolt.setJmsMessageProducer((JmsMessageProducer) (session, input) -> {
             String json = "{\"word\":\"" + input.getValue(0).toString() + "\", \"count\":"
@@ -40,11 +40,11 @@ public class TwitterHashtagStorm {
         builder.setBolt("twitter-hashtag-counter-bolt", new HashtagCounterBolt())
                 .fieldsGrouping("twitter-hashtag-reader-bolt", new Fields("hashtag"));
 
-        builder.setBolt("twitter-jms-counter-bolt", jmsBolt)
-                .fieldsGrouping("twitter-hashtag-counter-bolt", new Fields("hashtag"));
+        builder.setBolt("twitter-jms-bolt", jmsBolt)
+                .shuffleGrouping("twitter-hashtag-counter-bolt");
+                //.fieldsGrouping("twitter-hashtag-counter-bolt", new Fields("hashtag"));
 
         LocalCluster cluster = new LocalCluster();
-
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
         Thread.sleep(10000);
         cluster.shutdown();
