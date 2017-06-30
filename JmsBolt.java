@@ -1,5 +1,6 @@
 package storm;
 
+import org.apache.camel.CamelContext;
 import org.apache.storm.jms.JmsMessageProducer;
 import org.apache.storm.jms.JmsProvider;
 import org.apache.storm.task.OutputCollector;
@@ -22,6 +23,7 @@ public class JmsBolt extends BaseRichBolt {
     private int jmsAcknowledgeMode = Session.AUTO_ACKNOWLEDGE;
     private JmsProvider jmsProvider;
     private JmsMessageProducer producer;
+    private CamelContext producerTemplate;
     private OutputCollector collector;
 
     public void setJmsProvider(JmsProvider provider){
@@ -39,7 +41,6 @@ public class JmsBolt extends BaseRichBolt {
     @Override
     public void prepare(Map stormConf, TopologyContext context,
                         OutputCollector collector) {
-
         if(this.jmsProvider == null){
             try {
                 throw new IllegalStateException("JMS Provider not set.");
@@ -66,6 +67,7 @@ public class JmsBolt extends BaseRichBolt {
             this.messageProducer = session.createProducer(dest);
 
             connection.start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,6 +84,7 @@ public class JmsBolt extends BaseRichBolt {
                     this.messageProducer.send(msg);
                     System.out.println(input);
                 }
+                System.out.println("Message: " + msg.toString() +" sent to: " + msg.getJMSDestination());
             }
             if(this.autoAck){
                 this.collector.ack(input);

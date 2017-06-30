@@ -2,7 +2,6 @@ package storm;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
-import org.apache.storm.jms.JmsMessageProducer;
 import org.apache.storm.jms.JmsProvider;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
@@ -11,6 +10,10 @@ import storm.jms.BoltJmsProvider;
 public class TwitterHashtagStorm {
 
     public static void main(String[] args) throws Exception{
+
+        //ProducerTemplate producer = new DefaultCamelContext().createProducerTemplate();
+        //producer.sendBody("activemq:HashtagFromScraperQueue", "Hello World!");
+
         String consumerKey = "sKLbkYsWC8C2dydfQtWnaPJv2";
         String consumerSecret = "YyWaH1KWixsqV9XZGyIK2yzeEJYMDfNw0mzOiMik4aFHpcDgws";
         String accessToken = "874981062123900929-4l9YD0ApKesnvJKhFCkNJ2wxZOwqbVg";
@@ -21,10 +24,12 @@ public class TwitterHashtagStorm {
         config.setDebug(true);
 
         JmsBolt jmsBolt = new JmsBolt();
-        JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost", "activemq:HashtagFromScraperQueue");
+        JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost",
+                "activemq:HashtagFromScraperQueue");
+
         jmsBolt.setJmsProvider(jmsProvider);
-        jmsBolt.setJmsMessageProducer((JmsMessageProducer) (session, input) -> {
-            String json = "{\"word\":\"" + input.getValue(0).toString() + "\", \"count\":"
+        jmsBolt.setJmsMessageProducer((session, input) -> {
+            final String json = "{\"word\":\"" + input.getValue(0).toString() + "\", \"count\":"
                     + String.valueOf(input.getValue(0)) + "}";
             return session.createTextMessage(json);});
 
@@ -46,7 +51,7 @@ public class TwitterHashtagStorm {
 
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
-        Thread.sleep(10000);
+        Thread.sleep(3000);
         cluster.shutdown();
     }
 
