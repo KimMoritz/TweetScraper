@@ -52,7 +52,7 @@ public class TwitterHashtagStorm {
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
         Thread.sleep(3000);
-        cluster.shutdown();
+        //cluster.shutdown();
     }
 
     static String[] getKeyWords(){

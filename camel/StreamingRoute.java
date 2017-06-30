@@ -6,7 +6,7 @@ public final class StreamingRoute extends RouteBuilder {
 
     @Override
     public final void configure() throws Exception {
-        from("activemq:my-queue")
+        from("activemq:HashtagFromScraperQueue")
                 .to("websocket://storm?sendToAll=true");
     }
 }
