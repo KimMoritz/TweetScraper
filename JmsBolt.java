@@ -82,7 +82,6 @@ public class JmsBolt extends BaseRichBolt {
                     this.messageProducer.send(msg.getJMSDestination(), msg);
                 } else {
                     this.messageProducer.send(msg);
-                    System.out.println(input);
                 }
                 System.out.println("Message: " + msg.toString() +" sent to: " + msg.getJMSDestination());
             }

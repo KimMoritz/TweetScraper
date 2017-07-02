@@ -25,7 +25,7 @@ public class TwitterHashtagStorm {
 
         JmsBolt jmsBolt = new JmsBolt();
         JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost",
-                "activemq:HashtagFromScraperQueue");
+                "mailbox");
 
         jmsBolt.setJmsProvider(jmsProvider);
         jmsBolt.setJmsMessageProducer((session, input) -> {
@@ -52,8 +52,10 @@ public class TwitterHashtagStorm {
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
         Thread.sleep(3000);
-        //cluster.shutdown();
+        cluster.shutdown();
     }
+
+
 
     static String[] getKeyWords(){
         String[] keyWords = {"asdf"};

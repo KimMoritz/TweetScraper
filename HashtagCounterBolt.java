@@ -42,9 +42,9 @@ public class HashtagCounterBolt implements IRichBolt {
 
     @Override
     public void cleanup() {
-        for(Map.Entry<String, Integer> entry:counterMap.entrySet()){
+        /*for(Map.Entry<String, Integer> entry:counterMap.entrySet()){
             System.out.println("Result: " + entry.getKey()+" : " + entry.getValue());
-        }
+        }*/
     }
 
     @Override
