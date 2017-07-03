@@ -84,8 +84,12 @@ public class JmsBolt extends BaseRichBolt {
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Queue queue = session.createQueue("hashTagStormQueue");
             MessageProducer prod = session.createProducer(queue);
-            TextMessage message = session.createTextMessage (input.toString());
+            Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) input.getValue(0);
+            TextMessage message = session.createTextMessage (
+                    "{\"key\":\"" + entry.getKey() + "\"," +
+                            "\"value\":" + entry.getValue() + "}");
             prod.send(message);
+            session.close();
             connection.stop();
             if(this.autoAck){
                 this.collector.ack(input);
