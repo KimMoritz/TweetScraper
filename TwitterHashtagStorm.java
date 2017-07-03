@@ -10,7 +10,6 @@ import storm.jms.BoltJmsProvider;
 public class TwitterHashtagStorm {
 
     public static void main(String[] args) throws Exception{
-
         //ProducerTemplate producer = new DefaultCamelContext().createProducerTemplate();
         //producer.sendBody("activemq:HashtagFromScraperQueue", "Hello World!");
 
@@ -25,7 +24,7 @@ public class TwitterHashtagStorm {
 
         JmsBolt jmsBolt = new JmsBolt();
         JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost",
-                "mailbox");
+                "activemq:mailbox");
 
         jmsBolt.setJmsProvider(jmsProvider);
         jmsBolt.setJmsMessageProducer((session, input) -> {
@@ -51,11 +50,9 @@ public class TwitterHashtagStorm {
 
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
-        Thread.sleep(3000);
+        Thread.sleep(10000);
         cluster.shutdown();
     }
-
-
 
     static String[] getKeyWords(){
         String[] keyWords = {"asdf"};

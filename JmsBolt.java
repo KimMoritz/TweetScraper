@@ -1,5 +1,6 @@
 package storm;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.storm.jms.JmsMessageProducer;
 import org.apache.storm.jms.JmsProvider;
@@ -76,15 +77,16 @@ public class JmsBolt extends BaseRichBolt {
     @Override
     public void execute(Tuple input) {
         try {
-            Message msg = this.producer.toMessage(this.session, input);
-            if(msg != null){
-                if (msg.getJMSDestination() != null) {
-                    this.messageProducer.send(msg.getJMSDestination(), msg);
-                } else {
-                    this.messageProducer.send(msg);
-                }
-                System.out.println("Message: " + msg.toString() +" sent to: " + msg.getJMSDestination());
-            }
+            ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory
+                    ("tcp://localhost:61616");
+            Connection connection = factory.createConnection();
+            connection.start();
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Queue queue = session.createQueue("hashTagStormQueue");
+            MessageProducer prod = session.createProducer(queue);
+            TextMessage message = session.createTextMessage (input.toString());
+            prod.send(message);
+            connection.stop();
             if(this.autoAck){
                 this.collector.ack(input);
             }
