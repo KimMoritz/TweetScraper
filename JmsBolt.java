@@ -1,7 +1,5 @@
 package storm;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.camel.CamelContext;
 import org.apache.storm.jms.JmsMessageProducer;
 import org.apache.storm.jms.JmsProvider;
 import org.apache.storm.task.OutputCollector;
@@ -11,6 +9,7 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
 
 import javax.jms.*;
+import javax.jms.IllegalStateException;
 import java.util.Map;
 
 public class JmsBolt extends BaseRichBolt {
@@ -23,7 +22,6 @@ public class JmsBolt extends BaseRichBolt {
     private int jmsAcknowledgeMode = Session.AUTO_ACKNOWLEDGE;
     private JmsProvider jmsProvider;
     private JmsMessageProducer producer;
-    private CamelContext producerTemplate;
     private OutputCollector collector;
 
     public void setJmsProvider(JmsProvider provider){
@@ -40,7 +38,7 @@ public class JmsBolt extends BaseRichBolt {
 
     @Override
     public void prepare(Map stormConf, TopologyContext context,
-                        OutputCollector collector) {/*
+                        OutputCollector collector) {
         if(this.jmsProvider == null){
             try {
                 throw new IllegalStateException("JMS Provider not set.");
@@ -54,11 +52,9 @@ public class JmsBolt extends BaseRichBolt {
             }catch (IllegalAccessException e){
                 e.printStackTrace();
             }
-        }*/
+        }
 
-        this.collector = collector;
-
-        /*try {
+        try {
             ConnectionFactory cf = this.jmsProvider.connectionFactory();
             Destination dest = this.jmsProvider.destination();
             this.connection = cf.createConnection();
@@ -70,34 +66,34 @@ public class JmsBolt extends BaseRichBolt {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
 
+        this.collector = collector;
 
     }
 
     @Override
     public void execute(Tuple input) {
+
         try {
-            ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory
-                    ("tcp://localhost:61616");
-            Connection connection = factory.createConnection();
-            connection.start();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Queue queue = session.createQueue("hashTagStormQueue");
-            MessageProducer prod = session.createProducer(queue);
+            Message msg = this.producer.toMessage(this.session, input);
             Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) input.getValue(0);
             TextMessage message = session.createTextMessage (
                     "{\"key\":\"" + entry.getKey() + "\"," +
                             "\"value\":" + entry.getValue() + "}");
-            prod.send(message);
-            session.close();
-            connection.stop();
+            if(msg != null){
+                if (msg.getJMSDestination() != null) {
+                    this.messageProducer.send(msg.getJMSDestination(), message);
+                } else {
+                    this.messageProducer.send(message);
+                    System.out.println("sent: " + message.getText());
+                }
+            }
             if(this.autoAck){
                 this.collector.ack(input);
             }
         } catch (JMSException e) {
             this.collector.fail(input);
-            e.printStackTrace();
         }
     }
 

@@ -23,8 +23,8 @@ public class TwitterHashtagStorm {
         config.setDebug(true);
 
         JmsBolt jmsBolt = new JmsBolt();
-        JmsProvider jmsProvider = new BoltJmsProvider("vm://localhost",
-                "activemq:mailbox");
+        JmsProvider jmsProvider = new BoltJmsProvider("tcp://localhost:61616",
+                "hashTagStormQueue");
 
         jmsBolt.setJmsProvider(jmsProvider);
         jmsBolt.setJmsMessageProducer((session, input) -> {
@@ -50,8 +50,8 @@ public class TwitterHashtagStorm {
 
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
-        Thread.sleep(10000);
-        cluster.shutdown();
+        //Thread.sleep(10000);
+        //cluster.shutdown();
     }
 
     static String[] getKeyWords(){
