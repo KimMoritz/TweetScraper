@@ -11,7 +11,6 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
 
 import javax.jms.*;
-import javax.jms.IllegalStateException;
 import java.util.Map;
 
 public class JmsBolt extends BaseRichBolt {
@@ -41,7 +40,7 @@ public class JmsBolt extends BaseRichBolt {
 
     @Override
     public void prepare(Map stormConf, TopologyContext context,
-                        OutputCollector collector) {
+                        OutputCollector collector) {/*
         if(this.jmsProvider == null){
             try {
                 throw new IllegalStateException("JMS Provider not set.");
@@ -55,11 +54,11 @@ public class JmsBolt extends BaseRichBolt {
             }catch (IllegalAccessException e){
                 e.printStackTrace();
             }
-        }
+        }*/
 
         this.collector = collector;
 
-        try {
+        /*try {
             ConnectionFactory cf = this.jmsProvider.connectionFactory();
             Destination dest = this.jmsProvider.destination();
             this.connection = cf.createConnection();
@@ -71,7 +70,9 @@ public class JmsBolt extends BaseRichBolt {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+
+
     }
 
     @Override
