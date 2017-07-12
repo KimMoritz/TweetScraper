@@ -43,8 +43,7 @@ public class TwitterHashtagStorm {
                 .fieldsGrouping("twitter-hashtag-reader-bolt", new Fields("hashtag"));
 
         builder.setBolt("twitter-jms-bolt", jmsBolt)
-                .shuffleGrouping("twitter-hashtag-counter-bolt");
-                //.fieldsGrouping("twitter-hashtag-counter-bolt", new Fields("hashtag"));
+        .shuffleGrouping("twitter-hashtag-counter-bolt");
 
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
