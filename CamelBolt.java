@@ -44,7 +44,6 @@ public class CamelBolt extends BaseRichBolt {
         }
 
         this.collector = collector;
-
     }
 
     @Override
