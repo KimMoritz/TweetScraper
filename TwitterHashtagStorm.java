@@ -10,14 +10,12 @@ import storm.jms.BoltJmsProvider;
 public class TwitterHashtagStorm {
 
     public static void main(String[] args) throws Exception{
-        //ProducerTemplate producer = new DefaultCamelContext().createProducerTemplate();
-        //producer.sendBody("activemq:HashtagFromScraperQueue", "Hello World!");
 
         String consumerKey = "sKLbkYsWC8C2dydfQtWnaPJv2";
         String consumerSecret = "YyWaH1KWixsqV9XZGyIK2yzeEJYMDfNw0mzOiMik4aFHpcDgws";
         String accessToken = "874981062123900929-4l9YD0ApKesnvJKhFCkNJ2wxZOwqbVg";
         String accessTokenSecret = "LWwFocfRbUrjGf4eldm8Cw7fJRkzTKO8N5XZSvNQmxAuE";
-        String[] keyWords = {"trump", "weekend"};
+        String[] keyWords = {"trump"};
 
         Config config = new Config();
         config.setDebug(true);

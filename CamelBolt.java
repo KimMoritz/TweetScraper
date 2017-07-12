@@ -12,7 +12,7 @@ import javax.jms.*;
 import javax.jms.IllegalStateException;
 import java.util.Map;
 
-public class JmsBolt extends BaseRichBolt {
+public class CamelBolt extends BaseRichBolt {
 
     private boolean autoAck = true;
     private Connection connection;
