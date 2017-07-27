@@ -1,0 +1,45 @@
+<component name="libraryTable">
+  <library name="org.apache.storm:storm-jms:1.1.0" type="repository">
+    <properties maven-id="org.apache.storm:storm-jms:1.1.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/storm/storm-jms/1.1.0/storm-jms-1.1.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/esotericsoftware/kryo/3.0.3/kryo-3.0.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/esotericsoftware/reflectasm/1.10.1/reflectasm-1.10.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/5.0.3/asm-5.0.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/esotericsoftware/minlog/1.3.0/minlog-1.3.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/2.1/objenesis-2.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/clojure/1.7.0/clojure-1.7.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ring-cors/ring-cors/0.1.5/ring-cors-0.1.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lmax/disruptor/3.3.2/disruptor-3.3.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.8/log4j-api-2.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-core/2.8/log4j-core-2.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-slf4j-impl/2.8/log4j-slf4j-impl-2.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/log4j-over-slf4j/1.6.6/log4j-over-slf4j-1.6.6.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/geronimo/specs/geronimo-jms_1.1_spec/1.1.1/geronimo-jms_1.1_spec-1.1.1.jar!/" />
+      <root url="file://$MAVEN_REPOSITORY$/org/apache/storm/storm-jms/1.1.0" />
+      <root url="file://$MAVEN_REPOSITORY$/org/apache/storm/storm-jms/1.1.0" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/storm/storm-jms/1.1.0/storm-jms-1.1.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/storm/storm-core/1.1.0/storm-core-1.1.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/esotericsoftware/kryo/3.0.3/kryo-3.0.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/esotericsoftware/reflectasm/1.10.1/reflectasm-1.10.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/5.0.3/asm-5.0.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/esotericsoftware/minlog/1.3.0/minlog-1.3.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/objenesis/objenesis/2.1/objenesis-2.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/clojure/clojure/1.7.0/clojure-1.7.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/ring-cors/ring-cors/0.1.5/ring-cors-0.1.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lmax/disruptor/3.3.2/disruptor-3.3.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.8/log4j-api-2.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-core/2.8/log4j-core-2.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-slf4j-impl/2.8/log4j-slf4j-impl-2.8.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/log4j-over-slf4j/1.6.6/log4j-over-slf4j-1.6.6.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/geronimo/specs/geronimo-jms_1.1_spec/1.1.1/geronimo-jms_1.1_spec-1.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/apache/storm/storm-jms/1.1.0" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/apache/storm/storm-jms/1.1.0" recursive="false" />
+  </library>
+</component>

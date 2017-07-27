@@ -1,0 +1,4 @@
+worker-id: 36fc47b7-4478-4ce0-99b1-d85d4aac33b2
+logs.users: []
+logs.groups: []
+topology.submitter.user: kim
