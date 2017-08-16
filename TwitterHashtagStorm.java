@@ -46,14 +46,16 @@ public class TwitterHashtagStorm {
         .shuffleGrouping("twitter-hashtag-counter-bolt");
 
         LocalCluster cluster = new LocalCluster();
+
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
-        //Thread.sleep(10000);
-        //cluster.shutdown();
+        /*Thread.sleep(30*1000);
+        cluster.killTopology("TwitterHashtagStorm");
+        cluster.shutdown();*/
     }
 
     static String[] getKeyWords(){
-        String[] keyWords = {"asdf"};
-        //TODO: Fetch keywords stored in database, via data layer, routed by Camel
+        String[] keyWords = {"trump"};
+        //TODO: Fetch keywords from config file
         return keyWords;
     }
 }
