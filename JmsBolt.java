@@ -102,6 +102,7 @@ public class JmsBolt extends BaseRichBolt {
     @Override
     public void cleanup(){
         try {
+            this.messageProducer.close();
             this.session.close();
             this.connection.close();
         } catch (JMSException e) {
