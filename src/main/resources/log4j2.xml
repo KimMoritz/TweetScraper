@@ -7,9 +7,6 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="org.apache.storm" level="WARN">
-            <AppenderRef ref="Console"/>
-        </Logger>
         <Root level="WARN">
             <AppenderRef ref="Console"/>
         </Root>
