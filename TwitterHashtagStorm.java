@@ -54,7 +54,6 @@ public class TwitterHashtagStorm {
 
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
         /*Thread.sleep(30*1000);
-        cluster.killTopology("TwitterHashtagStorm");
         cluster.shutdown();*/
     }
 
