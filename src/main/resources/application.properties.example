@@ -1,0 +1,6 @@
+spring.activemq.broker-url=tcp://localhost:61616
+consumerKey=consumerKey
+consumerSecret=consumerSecret
+accessToken=accessToken
+accessTokenSecret=accessTokenSecret
+keyWords=trump
