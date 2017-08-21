@@ -45,7 +45,8 @@ public class TwitterHashtagStorm {
         builder.setBolt("twitter-jms-bolt", jmsBolt)
         .shuffleGrouping("twitter-hashtag-counter-bolt");
 
-        LocalCluster cluster = new LocalCluster();
+        //LocalCluster cluster = new LocalCluster();
+        LocalCluster cluster = new LocalCluster("localhost", 2181L);
 
         cluster.submitTopology("TwitterHashtagStorm", config, builder.createTopology());
         /*Thread.sleep(30*1000);
