@@ -7,15 +7,19 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import storm.jms.BoltJmsProvider;
 
+import java.util.ResourceBundle;
+
 public class TwitterHashtagStorm {
 
     public static void main(String[] args) throws Exception{
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
 
-        String consumerKey = "sKLbkYsWC8C2dydfQtWnaPJv2";
-        String consumerSecret = "YyWaH1KWixsqV9XZGyIK2yzeEJYMDfNw0mzOiMik4aFHpcDgws";
-        String accessToken = "874981062123900929-4l9YD0ApKesnvJKhFCkNJ2wxZOwqbVg";
-        String accessTokenSecret = "LWwFocfRbUrjGf4eldm8Cw7fJRkzTKO8N5XZSvNQmxAuE";
-        String[] keyWords = {"trump"};
+
+        String consumerKey = resourceBundle.getString("consumerKey");
+        String consumerSecret = resourceBundle.getString("consumerSecret");
+        String accessToken = resourceBundle.getString("accessToken");
+        String accessTokenSecret = resourceBundle.getString("accessTokenSecret");
+        String[] keyWords = {resourceBundle.getString("keyWords")};
 
         Config config = new Config();
         config.setDebug(true);
