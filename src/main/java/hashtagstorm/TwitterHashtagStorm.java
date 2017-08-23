@@ -20,13 +20,14 @@ public class TwitterHashtagStorm {
         String accessToken = resourceBundle.getString("accessToken");
         String accessTokenSecret = resourceBundle.getString("accessTokenSecret");
         String[] keyWords = {resourceBundle.getString("keyWords")};
+        String brokerUrl = resourceBundle.getString("spring.activemq.broker-url");
+        String queue = resourceBundle.getString("queue");
 
         Config config = new Config();
         config.setDebug(true);
 
         JmsBolt jmsBolt = new JmsBolt();
-        JmsProvider jmsProvider = new BoltJmsProvider("tcp://localhost:61616",
-                "hashTagStormQueue");
+        JmsProvider jmsProvider = new BoltJmsProvider(brokerUrl,queue);
 
         jmsBolt.setJmsProvider(jmsProvider);
         jmsBolt.setJmsMessageProducer((session, input) -> {
