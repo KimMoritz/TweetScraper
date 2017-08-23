@@ -14,7 +14,6 @@ public class TwitterHashtagStorm {
     public static void main(String[] args) throws Exception{
         ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
 
-
         String consumerKey = resourceBundle.getString("consumerKey");
         String consumerSecret = resourceBundle.getString("consumerSecret");
         String accessToken = resourceBundle.getString("accessToken");
